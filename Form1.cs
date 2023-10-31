@@ -9,44 +9,45 @@ namespace ONeilloGame
 {
     public partial class Form1 : Form
     {
-        private const int BoardSize = 8;
-        private const int CellSize = 60;
-        private PictureBox[,] board; //
+        private const int BoardSize = 8; // define the size of the game board. in our case it is 8x8
+        private const int CellSize = 126; // define the size of every cell in pixels
+        private PictureBox[,] board; // define a 2D array of picture box controls for the board
 
         public Form1()
         {
-            InitializeComponent();
-            InitialiseBoard();
+            InitializeComponent(); // initialise the form itself
+            InitialiseBoard(); // then, initialise the board
         }
 
         private void InitialiseBoard()
         {
-            board = new PictureBox[BoardSize, BoardSize];
-            tableLayoutPanel.RowStyles.Clear();
-            tableLayoutPanel.ColumnStyles.Clear();
-            tableLayoutPanel.RowCount = BoardSize;
-            tableLayoutPanel.ColumnCount = BoardSize;
-            tableLayoutPanel.AutoSize = true;
+            board = new PictureBox[BoardSize, BoardSize]; // use pictureboxes to set every cell of the board. this means that i can add the images provided for the squares
+            tableLayoutPanel.RowStyles.Clear(); // clear any rowstyles that may currently be active on the board
+            tableLayoutPanel.ColumnStyles.Clear(); // clear any columnstyles that may currently be active on the board
+            tableLayoutPanel.RowCount = BoardSize; // set the number of rows in the table layout
+            tableLayoutPanel.ColumnCount = BoardSize; // set the number of columns in the table layout
+            tableLayoutPanel.AutoSize = true; // automatically adjust the size of the table lauout
 
-            for (int row = 0; row < BoardSize; row++)
+            for (int row = 0; row < BoardSize; row++) // create the game board, implementing the picture box controls throughout
             {
-                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, CellSize));
-                for (int col = 0; col < BoardSize; col++)
+                tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, CellSize)); // add a new row style that will be implemented for the specific cell size
+                for (int col = 0; col < BoardSize; col++) // loop through each column in the same way we are looping through each row
                 {
-                    tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, CellSize));
-                    board[row, col] = new PictureBox
+                    tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, CellSize)); 
+                    board[row, col] = new PictureBox // create a picture box control for the board
                     {
-                        Size = new Size(CellSize, CellSize),
-                        Dock = DockStyle.Fill,
-                        Tag = new Tuple<int, int>(row, col),
-                        Image = Resources.empty_square,
-                        Cursor = Cursors.Hand
+                        Size = new Size(CellSize, CellSize), // manually set the size for the picture box
+                        Dock = DockStyle.Fill, // dock the picture box to fit its' container
+                        Tag = new Tuple<int, int>(row, col), // store the information for the rows and columns as a tag
+                        Image = Resources.empty_square, // set the initial image to an empty square for the picture box
+                        Cursor = Cursors.Hand // set the cursor to the hand icon while hovering over the box
                     };
-                    board[row, col].Click += BoardCellClick;
-                    tableLayoutPanel.Controls.Add(board[row, col], col, row);
+                    board[row, col].Click += BoardCellClick; // attach the click event handler to the box upon click
+                    tableLayoutPanel.Controls.Add(board[row, col], col, row); // add the picture box to the table layout
                 }
             }
 
+            // INITIALISE STARTING COUNTERS
             SetCounter(BoardSize / 2 - 1, BoardSize / 2 - 1, Resources.white_on_square);
             SetCounter(BoardSize / 2, BoardSize / 2 - 1, Resources.black_on_square);
             SetCounter(BoardSize / 2 - 1, BoardSize / 2, Resources.black_on_square);
@@ -191,8 +192,13 @@ namespace ONeilloGame
         private void Form1_Load(object sender, EventArgs e)
         {
             // this.Size = new Size(800, 500);
-            this.Size = new Size(BoardSize * CellSize + 20, BoardSize * CellSize + 60); // Adjust the form size
+            this.Size = new Size(BoardSize * CellSize + 20, BoardSize * CellSize + 60); // set the form window size, allow for some space 
         }
 
     }
 }
+
+// view properties min max box set to false
+
+// TO DO - change pixels of images, try to get them to match the size of the box and hopefully therefore fix last row stretching
+//         fix valid move error. 
