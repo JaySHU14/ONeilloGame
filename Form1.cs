@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic; // import List type
+using System.Diagnostics; // import diagnostics for debugging. invalid move fix
 
 namespace ONeilloGame
 {
@@ -10,15 +11,15 @@ namespace ONeilloGame
     {
         private const int BoardSize = 8;
         private const int CellSize = 60;
-        private PictureBox[,] board;
+        private PictureBox[,] board; //
 
         public Form1()
         {
             InitializeComponent();
-            InitializeBoard();
+            InitialiseBoard();
         }
 
-        private void InitializeBoard()
+        private void InitialiseBoard()
         {
             board = new PictureBox[BoardSize, BoardSize];
             tableLayoutPanel.RowStyles.Clear();
@@ -67,14 +68,20 @@ namespace ONeilloGame
             int row = cellPosition.Item1;
             int col = cellPosition.Item2;
 
+            Debug.WriteLine($"Clicked cell: Row {row}, Col {col}");
+
             if (ValidMove(row, col))
             {
+                Debug.WriteLine("Valid move detected. ");
                 MakeMove(row, col); // if a valid move, move the counter 
+                // SwitchTurn();
+                // UpdateScores();
 
-                BlackTurn = !BlackTurn; // switch players
+                // BlackTurn = !BlackTurn; // switch players
             }
             else
             {
+                Debug.WriteLine("Invalid move detected. ");
                 MessageBox.Show("Invalid move. Try again."); // if the move isn't valid, inform the user
             }
         }
@@ -178,7 +185,7 @@ namespace ONeilloGame
 
         private void buttonNewGame_Click(object sender, EventArgs e)
         {
-            InitializeBoard();
+            InitialiseBoard();
         }
 
         private void Form1_Load(object sender, EventArgs e)
